@@ -20,7 +20,7 @@ class OrderController {
   }
 
   static async addOrder(req, res) {
-    if (!req.body.table || !req.body.status_order) {
+    if (!req.body.TableId || !req.body.status_order) {
       util.setError(400, 'Please provide complete details')
       return util.send(res)
     }
@@ -79,28 +79,28 @@ class OrderController {
     }
   }
 
-//   static async deleteOrder(req, res) {
-//     const { id } = req.params
+  static async deleteOrder(req, res) {
+    const { id } = req.params
 
-//     if (!Number(id)) {
-//       util.setError(400, 'Please provide a numeric value')
-//       return util.send(res)
-//     }
+    if (!Number(id)) {
+      util.setError(400, 'Please provide a numeric value')
+      return util.send(res)
+    }
 
-//     try {
-//       const orderToDelete = await OrderService.deleteOrder(id)
+    try {
+      const orderToDelete = await OrderService.deleteOrder(id)
 
-//       if (orderToDelete) {
-//         util.setSuccess(200, 'Order deleted')
-//       } else {
-//         util.setError(404, `Order with the id ${id} cannot be found`)
-//       }
-//       return util.send(res)
-//     } catch (error) {
-//       util.setError(400, error)
-//       return util.send(res)
-//     }
-//   }
+      if (orderToDelete) {
+        util.setSuccess(200, 'Order deleted')
+      } else {
+        util.setError(404, `Order with the id ${id} cannot be found`)
+      }
+      return util.send(res)
+    } catch (error) {
+      util.setError(400, error)
+      return util.send(res)
+    }
+  }
 }
 
 export default OrderController;

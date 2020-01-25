@@ -46,21 +46,21 @@ class OrderService {
     }
   }
 
-  //   static async deleteOrder(id) {
-  //     try {
-  //       const orderToDelete = await database.Order.findOne({ where: { id: Number(id) } })
+    static async deleteOrder(id) {
+      try {
+        const orderToDelete = await database.Order.findOne({ where: { id: Number(id) } })
 
-  //       if (orderToDelete) {
-  //         const deletedOrder = await database.Order.destroy({
-  //           where: { id: Number(id) }
-  //         })
-  //         return deletedOrder
-  //       }
-  //       return null
-  //     } catch (error) {
-  //       throw error
-  //     }
-  //   }
+        if (orderToDelete) {
+          const deletedOrder = await database.Order.destroy({
+            where: { id: Number(id) }
+          })
+          return deletedOrder
+        }
+        return null
+      } catch (error) {
+        throw error
+      }
+    }
 }
 
 export default OrderService;

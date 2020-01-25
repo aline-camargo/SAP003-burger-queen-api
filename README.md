@@ -107,27 +107,27 @@ Após ver os conteúdos importantes (é importante ver esses conteúdos antes de
 
 #### `/products`
 
-* [ ] `GET /products`
-* [ ] `GET /products/:productid`
-* [ ] `POST /products`
-* [ ] `PUT /products/:productid`
-* [ ] `DELETE /products/:productid`
+* [X] `GET /products`
+* [X] `GET /products/:productid`
+* [X] `POST /products`
+* [X] `PUT /products/:productid`
+* [X] `DELETE /products/:productid`
 
 #### `/orders`
 
-* [ ] `GET /orders`
-* [ ] `GET /orders/:orderid`
-* [ ] `POST /orders`
-* [ ] `PUT /orders/:orderid`
-* [ ] `DELETE /orders/:orderid`
+* [X] `GET /orders`
+* [X] `GET /orders/:orderid`
+* [X] `POST /orders`
+* [X] `PUT /orders/:orderid`
+* [X] `DELETE /orders/:orderid`
 
 #### `/tables`
 
-* [ ] `GET /tables`
-* [ ] `GET /tables/:tableid`
-* [ ] `POST /tables`
-* [ ] `PUT /tables/:tableid`
-* [ ] `DELETE /tables/:tableid`
+* [X] `GET /tables`
+* [X] `GET /tables/:tableid`
+* [X] `POST /tables`
+* [X] `PUT /tables/:tableid`
+* [X] `DELETE /tables/:tableid`
 
 ### Testes unitários
 
