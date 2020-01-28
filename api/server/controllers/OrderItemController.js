@@ -3,7 +3,7 @@ import Util from '../utils/Utils';
 
 const util = new Util()
 
-class OrderController {
+class OrderItensController {
   static async getAllOrderItens(req, res) {
     try {
       const allOrdersItens = await OrderItemService.getAllOrderItens()
@@ -48,7 +48,7 @@ class OrderController {
       if (!updateOrderItem) {
         util.setError(404, `Cannot find order item with the id: ${id}`)
       } else {
-        util.setSuccess(200, 'Product updated', updateOrderItem)
+        util.setSuccess(200, 'Order item updated', updateOrderItem)
       }
       return util.send(res)
     } catch (error) {
@@ -104,4 +104,4 @@ class OrderController {
   }
 }
 
-export default OrderController;
+export default OrderItensController;
