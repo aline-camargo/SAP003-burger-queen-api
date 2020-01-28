@@ -53,7 +53,7 @@ describe('Testing the products endpoints:', () => {
   })
 
   it('Should get particular product', (done) => {
-    const productId = 1;
+    const productId = 2;
     chai.request(server)
       .get(`/api/products/${productId}`)
       .end((err, res) => {
@@ -66,7 +66,7 @@ describe('Testing the products endpoints:', () => {
       })
   })
 
-  it('It should not get a particular author with invalid id', (done) => {
+  it('It should not get a particular product with invalid id', (done) => {
     const productId = 8888
     chai.request(server)
       .get(`/api/products/${productId}`)
@@ -86,6 +86,100 @@ describe('Testing the products endpoints:', () => {
         expect(res.status).to.equal(400)
         res.body.should.have.property('message')
           .eql('Please input a valid numeric value')
+        done()
+      })
+  })
+
+  it('It should update a product', (done) => {
+    const productId = 2
+    const updatedProduct = {
+      id: productId,
+      itens: 'Negroni sem alcool (?)',
+      price: 20,
+      is_alcoholic: false
+    }
+    chai.request(server)
+      .put(`/api/products/${productId}`)
+      .send(updatedProduct)
+      .end((err, res) => {
+        expect(res.status).to.equal(200)
+        expect(res.body.data.id).equal(updatedProduct.id)
+        expect(res.body.data.itens).equal(updatedProduct.itens)
+        expect(res.body.data.is_alcoholic).equal(updatedProduct.is_alcoholic)
+        expect(res.body.data.price).equal(updatedProduct.price)
+        done()
+      })
+  })
+
+  it('It should not update a product with invalid id', (done) => {
+    const productId = 9999
+    const updatedProduct = {
+      id: productId,
+      itens: 'Negroni sem alcool (?)',
+      price: 20,
+      is_alcoholic: false
+    }
+    chai.request(server)
+      .put(`/api/products/${productId}`)
+      .send(updatedProduct)
+      .end((err, res) => {
+        expect(res.status).to.equal(404)
+        res.body.should.have.property('message')
+          .eql(`Cannot find product with the id: ${productId}`)
+        done()
+      })
+  })
+
+  it('It should not update a product with non-numeric id value', (done) => {
+    const productId = 'ggg'
+    const updatedProduct = {
+      id: productId,
+      itens: 'Negroni sem alcool (?)',
+      price: 20,
+      is_alcoholic: false
+    }
+    chai.request(server)
+      .put(`/api/products/${productId}`)
+      .send(updatedProduct)
+      .end((err, res) => {
+        expect(res.status).to.equal(400)
+        res.body.should.have.property('message')
+          .eql('Please input a valid numeric value')
+        done()
+      })
+  })
+
+  // it('It should delete a product', (done) => {
+  //   const productId = 1
+  //   chai.request(server)
+  //     .delete(`/api/products/${productId}`)
+  //     .end((err, res) => {
+  //       expect(res.status).to.equal(200)
+  //       expect(res.body.data).to.include({})
+  //       done()
+  //     })
+  // })
+
+  it('It should not delete a product with invalid id', (done) => {
+    const productId = 777
+    chai.request(server)
+      .delete(`/api/products/${productId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404)
+        res.body.should.have.property('message')
+          .eql(`Product with the id ${productId} cannot be found`)
+        done()
+      })
+  })
+
+  it('It should not delete a product with non-numeric id', (done) => {
+    const productId = 'bbb'
+    chai.request(server)
+      .delete(`/api/products/${productId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(400)
+        res.body.should.have.property('message')
+          .eql('Please provide a numeric value')
         done()
       })
   })
