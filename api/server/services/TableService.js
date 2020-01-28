@@ -1,5 +1,14 @@
 import database from '../src/models';
 
+// const getAll = async (req, res) => {
+//   try {
+//     const products = await database.Table.findAll({raw: true})
+//     res.json(products)
+//   } catch (err) {
+//     throw err
+//   }
+// }
+
 class TableService {
   static async getAllTables() {
     try {

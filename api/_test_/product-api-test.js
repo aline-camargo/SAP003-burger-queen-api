@@ -6,26 +6,26 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the products endpoints:', () => {
-  // it('It should add one product', (done) => {
-  //   const product = {
-  //     itens: 'Negroni',
-  //     price: 25,
-  //     is_alcoholic: true
-  //   }
-  //   chai.request(server)
-  //     .post('/api/products')
-  //     .send(product)
-  //     .end((err, res) => {
-  //       expect(res.status).to.equal(201)
-  //       expect(res.body.data).to.include({
-  //         id: 2,
-  //         itens: product.itens,
-  //         price: product.price,
-  //         is_alcoholic: product.is_alcoholic
-  //       })
-  //       done()
-  //     })
-  // })
+  it('It should add one product', (done) => {
+    const product = {
+      itens: 'Negroni',
+      price: 25,
+      is_alcoholic: true
+    }
+    chai.request(server)
+      .post('/api/products')
+      .send(product)
+      .end((err, res) => {
+        expect(res.status).to.equal(201)
+        expect(res.body.data).to.include({
+          id: 1,
+          itens: product.itens,
+          price: product.price,
+          is_alcoholic: product.is_alcoholic
+        })
+        done()
+      })
+  })
 
   it('Should not create a product with incomplete parameters', (done) => {
     chai.request(server)
@@ -53,7 +53,7 @@ describe('Testing the products endpoints:', () => {
   })
 
   it('Should get particular product', (done) => {
-    const productId = 2;
+    const productId = 1;
     chai.request(server)
       .get(`/api/products/${productId}`)
       .end((err, res) => {
@@ -91,7 +91,7 @@ describe('Testing the products endpoints:', () => {
   })
 
   it('It should update a product', (done) => {
-    const productId = 2
+    const productId = 1
     const updatedProduct = {
       id: productId,
       itens: 'Negroni sem alcool (?)',
