@@ -52,4 +52,42 @@ describe('Testing the products endpoints:', () => {
       })
   })
 
+  it('Should get particular product', (done) => {
+    const productId = 1;
+    chai.request(server)
+      .get(`/api/products/${productId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200)
+        expect(res.body.message).to.equal('Found product')
+        res.body.data.should.have.property('itens')
+        res.body.data.should.have.property('price')
+        res.body.data.should.have.property('is_alcoholic')
+        done()
+      })
+  })
+
+  it('It should not get a particular author with invalid id', (done) => {
+    const productId = 8888
+    chai.request(server)
+      .get(`/api/products/${productId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404)
+        res.body.should.have.property('message')
+          .eql(`Cannot find product with the id ${productId}`)
+        done()
+      })
+  })
+
+  it('It should not get a particular product with non-numeric id', (done) => {
+    const productId = 'aaa'
+    chai.request(server)
+      .get(`/api/products/${productId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(400)
+        res.body.should.have.property('message')
+          .eql('Please input a valid numeric value')
+        done()
+      })
+  })
+
 });
