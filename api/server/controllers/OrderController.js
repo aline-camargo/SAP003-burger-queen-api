@@ -5,17 +5,34 @@ const util = new Util()
 
 class OrderController {
   static async getAllOrders(req, res) {
-    try {
-      const allOrders = await OrderService.getAllOrders()
-      if (allOrders.length > 0) {
-        util.setSuccess(200, 'Orders retrieved', allOrders);
-      } else {
-        util.setSuccess(200, 'No orders found');
+    if (req.query.order) {
+      const id = req.query.order
+      try {
+        const theOrderItens = await OrderService.getItensOfOrder(id)
+
+        if (!theOrderItens) {
+          util.setError(404, `Cannot find order with the id ${id}`)
+        } else {
+          util.setSuccess(200, 'Found order itens', theOrderItens)
+        }
+        return util.send(res)
+      } catch (error) {
+        util.setError(404, error)
+        return util.send(res)
       }
-      return util.send(res)
-    } catch (error) {
-      util.setError(400, error)
-      return util.send(res)
+    } else {
+      try {
+        const allOrders = await OrderService.getAllOrders()
+        if (allOrders.length > 0) {
+          util.setSuccess(200, 'Orders retrieved', allOrders);
+        } else {
+          util.setSuccess(200, 'No orders found');
+        }
+        return util.send(res)
+      } catch (error) {
+        util.setError(400, error)
+        return util.send(res)
+      }
     }
   }
 
@@ -71,6 +88,29 @@ class OrderController {
         util.setError(404, `Cannot find order with the id ${id}`)
       } else {
         util.setSuccess(200, 'Found order', theOrder)
+      }
+      return util.send(res)
+    } catch (error) {
+      util.setError(404, error)
+      return util.send(res)
+    }
+  }
+
+  static async getItensOfOrder(req, res) {
+    const id = req.query.order
+
+    if (!Number(id)) {
+      util.setError(400, 'Please input a valid numeric value')
+      return util.send(res)
+    }
+
+    try {
+      const theOrderItens = await OrderService.getItensOfOrder(id)
+
+      if (!theOrderItens) {
+        util.setError(404, `Cannot find order with the id ${id}`)
+      } else {
+        util.setSuccess(200, 'Found order itens', theOrderItens)
       }
       return util.send(res)
     } catch (error) {

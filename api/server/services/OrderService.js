@@ -9,6 +9,30 @@ class OrderService {
     }
   }
 
+  static async getItensOfOrder(id) {
+    try {
+      const theOrderItens = await database.Order_Itens.findAll({
+        where: { OrderId: Number(id) }
+      })
+
+      return theOrderItens
+    } catch (error) {
+      throw error
+    }
+  }
+
+  static async getOrder(id) {
+    try {
+      const theOrder = await database.Order.findOne({
+        where: { id: Number(id) }
+      })
+
+      return theOrder
+    } catch (error) {
+      throw error
+    }
+  }
+
   static async addOrder(newOrder) {
     try {
       return await database.Order.create(newOrder)
@@ -34,33 +58,21 @@ class OrderService {
     }
   }
 
-  static async getOrder(id) {
+  static async deleteOrder(id) {
     try {
-      const theOrder = await database.Order.findOne({
-        where: { id: Number(id) }
-      })
+      const orderToDelete = await database.Order.findOne({ where: { id: Number(id) } })
 
-      return theOrder
+      if (orderToDelete) {
+        const deletedOrder = await database.Order.destroy({
+          where: { id: Number(id) }
+        })
+        return deletedOrder
+      }
+      return null
     } catch (error) {
       throw error
     }
   }
-
-    static async deleteOrder(id) {
-      try {
-        const orderToDelete = await database.Order.findOne({ where: { id: Number(id) } })
-
-        if (orderToDelete) {
-          const deletedOrder = await database.Order.destroy({
-            where: { id: Number(id) }
-          })
-          return deletedOrder
-        }
-        return null
-      } catch (error) {
-        throw error
-      }
-    }
 }
 
 export default OrderService;

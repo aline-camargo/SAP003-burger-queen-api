@@ -6,7 +6,18 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the products endpoints:', () => {
-  it('It should add one product', (done) => {
+  it('Should display a message when there is nothing to get', (done) => {
+    chai.request(server)
+    .get('/api/products')
+    .end((err, res) => {
+      expect(res.status).to.equal(200)
+      res.body.should.have.property('message')
+          .eql('No products found')
+        done()
+    })
+  })
+
+  it('It should create a product', (done) => {
     const product = {
       itens: 'Negroni',
       price: 25,
@@ -148,38 +159,38 @@ describe('Testing the products endpoints:', () => {
         done()
       })
   })
-
-  // it('It should delete a product', (done) => {
-  //   const productId = 1
-  //   chai.request(server)
-  //     .delete(`/api/products/${productId}`)
-  //     .end((err, res) => {
-  //       expect(res.status).to.equal(200)
-  //       expect(res.body.data).to.include({})
-  //       done()
-  //     })
-  // })
-
+  
   it('It should not delete a product with invalid id', (done) => {
     const productId = 777
     chai.request(server)
-      .delete(`/api/products/${productId}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(404)
-        res.body.should.have.property('message')
-          .eql(`Product with the id ${productId} cannot be found`)
-        done()
-      })
+    .delete(`/api/products/${productId}`)
+    .end((err, res) => {
+      expect(res.status).to.equal(404)
+      res.body.should.have.property('message')
+      .eql(`Product with the id ${productId} cannot be found`)
+      done()
+    })
   })
-
+  
   it('It should not delete a product with non-numeric id', (done) => {
     const productId = 'bbb'
     chai.request(server)
+    .delete(`/api/products/${productId}`)
+    .end((err, res) => {
+      expect(res.status).to.equal(400)
+      res.body.should.have.property('message')
+      .eql('Please provide a numeric value')
+      done()
+    })
+  })
+  
+  it('It should delete a product', (done) => {
+    const productId = 1
+    chai.request(server)
       .delete(`/api/products/${productId}`)
       .end((err, res) => {
-        expect(res.status).to.equal(400)
-        res.body.should.have.property('message')
-          .eql('Please provide a numeric value')
+        expect(res.status).to.equal(200)
+        expect(res.body.data).to.include({})
         done()
       })
   })
