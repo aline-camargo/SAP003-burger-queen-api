@@ -169,13 +169,21 @@ describe('Testing the tables endpoints:', () => {
   })
   
   it('It should delete a table', (done) => {
-    const tableId = 2
+    const table = {
+      number: 5
+    }
     chai.request(server)
-      .delete(`/api/tables/${tableId}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(200)
-        expect(res.body.data).to.include({})
-        done()
+      .post('/api/tables')
+      .send(table)
+      .end(() => {
+        const tableId = 2
+        chai.request(server)
+          .delete(`/api/tables/${tableId}`)
+          .end((err, res) => {
+            expect(res.status).to.equal(200)
+            expect(res.body.data).to.include({})
+            done()
+          })
       })
   })
 

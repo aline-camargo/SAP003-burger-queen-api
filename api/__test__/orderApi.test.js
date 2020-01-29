@@ -6,15 +6,6 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the orders endpoints:', () => {
-  const table = {
-    number: 66,
-  }
-  chai.request(server)
-    .post('/api/tables')
-    .send(table)
-    .end()
-
-
   it('Should display a message when there is nothing to get', (done) => {
     chai.request(server)
       .get('/api/orders')
@@ -27,22 +18,30 @@ describe('Testing the orders endpoints:', () => {
   })
 
   it('It should create a order', (done) => {
-    const order = {
-      TableId: 1,
-      status_order: 'Em preparo'
+    const table = {
+      number: 66,
     }
-
     chai.request(server)
-      .post('/api/orders')
-      .send(order)
-      .end((err, res) => {
-        expect(res.status).to.equal(201)
-        expect(res.body.data).to.include({
-          id: 1,
+      .post('/api/tables')
+      .send(table)
+      .end(() => {
+        const order = {
           TableId: 1,
           status_order: 'Em preparo'
-        })
-        done()
+        }
+    
+        chai.request(server)
+          .post('/api/orders')
+          .send(order)
+          .end((err, res) => {
+            expect(res.status).to.equal(201)
+            expect(res.body.data).to.include({
+              id: 1,
+              TableId: 1,
+              status_order: 'Em preparo'
+            })
+            done()
+          })
       })
   })
 
@@ -185,15 +184,15 @@ describe('Testing the orders endpoints:', () => {
       })
   })
 
-    it('It should delete a order', (done) => {
-      const orderId = 1
-      chai.request(server)
-        .delete(`/api/orders/${orderId}`)
-        .end((err, res) => {
-          expect(res.status).to.equal(200)
-          expect(res.body.data).to.include({})
-          done()
-        })
-    })
+  it('It should delete a order', (done) => {
+    const orderId = 1
+    chai.request(server)
+      .delete(`/api/orders/${orderId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200)
+        expect(res.body.data).to.include({})
+        done()
+      })
+  })
 
 });
