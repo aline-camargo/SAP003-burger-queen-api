@@ -6,16 +6,16 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the orders endpoints:', () => {
-  it('Should display a message when there is nothing to get', (done) => {
-    chai.request(server)
-      .get('/api/orders')
-      .end((err, res) => {
-        expect(res.status).to.equal(200)
-        res.body.should.have.property('message')
-          .eql('No orders found')
-        done()
-      })
-  })
+  // it('Should display a message when there is nothing to get', (done) => {
+  //   chai.request(server)
+  //     .get('/api/orders')
+  //     .end((err, res) => {
+  //       expect(res.status).to.equal(200)
+  //       res.body.should.have.property('message')
+  //         .eql('No orders found')
+  //       done()
+  //     })
+  // })
 
   it('It should create a order', (done) => {
     const table = {
@@ -29,7 +29,7 @@ describe('Testing the orders endpoints:', () => {
           TableId: 1,
           status_order: 'Em preparo'
         }
-    
+
         chai.request(server)
           .post('/api/orders')
           .send(order)
@@ -76,7 +76,6 @@ describe('Testing the orders endpoints:', () => {
       .end((err, res) => {
         expect(res.status).to.equal(200)
         expect(res.body.message).to.equal('Found order')
-        console.log(res.body)
         res.body.data.should.have.property('TableId')
         res.body.data.should.have.property('status_order')
         done()
@@ -185,14 +184,153 @@ describe('Testing the orders endpoints:', () => {
   })
 
   it('It should delete a order', (done) => {
-    const orderId = 1
+    const table = {
+      number: 99,
+    }
+    const order = {
+      TableId: 2,
+      status_order: 'Pronto'
+    }
+    const orderId = 2;
     chai.request(server)
-      .delete(`/api/orders/${orderId}`)
+      .post('/api/tables')
+      .send(table)
       .end((err, res) => {
-        expect(res.status).to.equal(200)
-        expect(res.body.data).to.include({})
+        chai.request(server)
+          .post('/api/orders')
+          .send(order)
+          .end((err, res) => {
+            chai.request(server)
+              .delete(`/api/orders/${orderId}`)
+              .end((err, res) => {
+                expect(res.status).to.equal(200)
+                expect(res.body.data).to.include({})
+              })
+          })
         done()
+      })
+      chai.request(server)
+      .get('/api/orders')
+      .end((err, res) => {
+        console.log(res.body, '------------------------------')
       })
   })
 
 });
+
+describe('Testing the orders itens endpoints:', () => {
+
+  it('Should create a order item', (done) => {
+    const orderItem = {
+      ProductId: 1,
+      OrderId: 3,
+      status_item: 'Pendente'
+    }
+    const table = {
+      number: 5,
+    }
+    const product = {
+      itens: 'Cosmopolitan',
+      price: 30,
+      is_alcoholic: true,
+    }
+    const order = {
+      TableId: 3,
+      status_order: 'Pendente'
+    }
+
+    chai.request(server)
+      .post('/api/products')
+      .send(product)
+      .end(() => {
+        chai.request(server)
+          .post('/api/tables')
+          .send(table)
+          .end(() => {
+            chai.request(server)
+              .post('/api/orders')
+              .send(order)
+              .end(() => {
+                chai.request(server)
+                  .post('/api/orders/itens')
+                  .send(orderItem)
+                  .end((err, res) => {
+                    expect(res.status).to.equal(201)
+                    expect(res.body.data).to.include({
+                      id: 1,
+                      ProductId: 1,
+                      OrderId: 3,
+                      status_item: 'Pendente'
+                    })
+                  })
+              })
+          })
+        done()
+      })
+  })
+
+  it('Should not create a order item with incomplete parameters', (done) => {
+    chai.request(server)
+      .post('/api/orders/itens')
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.equal(400)
+        res.body.should.have.property('message')
+          .eql('Please provide complete details')
+        done()
+      })
+  })
+
+  it('Should list orders itens found', (done) => {
+    chai.request(server)
+      .get('/api/orders/itens')
+      .end((err, res) => {
+        expect(res.status).to.equal(200)
+        expect(res.body.message).to.equal('Orders itens retrieved')
+        res.body.data[0].should.have.property('ProductId')
+        res.body.data[0].should.have.property('OrderId')
+        res.body.data[0].should.have.property('status_item')
+        done()
+      })
+  })
+
+  // it('Should get particular order item', (done) => {
+  //   const orderItemId = 1;
+  //   chai.request(server)
+  //     .get(`/api/orders/item/${orderItemId}`)
+  //     .end((err, res) => {
+  //       console.log(res.body)
+  //       expect(res.status).to.equal(200)
+  //       expect(res.body.message).to.equal('Found order item')
+  //       res.body.data.should.have.property('ProductId')
+  //       res.body.data.should.have.property('OrderId')
+  //       res.body.data.should.have.property('status_item')
+  //       done()
+  //     })
+  // })
+
+  // it('It should not get a particular order item with invalid id', (done) => {
+  //   const orderItemId = 8888
+  //   chai.request(server)
+  //     .get(`/api/orders/itens/${orderItemId}`)
+  //     .end((err, res) => {
+  //       expect(res.status).to.equal(404)
+  //       res.body.should.have.property('message')
+  //         .eql(`Cannot find order item with the id ${orderItemId}`)
+  //       done()
+  //     })
+  // })
+
+  // it('It should not get a particular order item with non-numeric id', (done) => {
+  //   const orderItemId = 'aaa'
+  //   chai.request(server)
+  //     .get(`/api/orders/itens/${orderItemId}`)
+  //     .end((err, res) => {
+  //       expect(res.status).to.equal(400)
+  //       res.body.should.have.property('message')
+  //         .eql('Please input a valid numeric value')
+  //       done()
+  //     })
+  // })
+
+})

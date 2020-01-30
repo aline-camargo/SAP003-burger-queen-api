@@ -6,7 +6,7 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the tables endpoints:', () => {
-  // it('Should disply a message when there is nothing to get', (done) => {
+  // it('Should display a message when there is nothing to get', (done) => {
   //   chai.request(server)
   //   .get('/api/tables')
   //   .end((err, res) => {
@@ -27,7 +27,7 @@ describe('Testing the tables endpoints:', () => {
       .end((err, res) => {
         expect(res.status).to.equal(201)
         expect(res.body.data).to.include({
-          id: 2,
+          id: 4,
           number: 66
         })
         done()
@@ -143,31 +143,31 @@ describe('Testing the tables endpoints:', () => {
         done()
       })
   })
-  
+
   it('It should not delete a table with invalid id', (done) => {
     const tableId = 777
     chai.request(server)
-    .delete(`/api/tables/${tableId}`)
-    .end((err, res) => {
-      expect(res.status).to.equal(404)
-      res.body.should.have.property('message')
-      .eql(`Table with the id ${tableId} cannot be found`)
-      done()
-    })
+      .delete(`/api/tables/${tableId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404)
+        res.body.should.have.property('message')
+          .eql(`Table with the id ${tableId} cannot be found`)
+        done()
+      })
   })
-  
+
   it('It should not delete a table with non-numeric id', (done) => {
     const tableId = 'bbb'
     chai.request(server)
-    .delete(`/api/tables/${tableId}`)
-    .end((err, res) => {
-      expect(res.status).to.equal(400)
-      res.body.should.have.property('message')
-      .eql('Please provide a numeric value')
-      done()
-    })
+      .delete(`/api/tables/${tableId}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(400)
+        res.body.should.have.property('message')
+          .eql('Please provide a numeric value')
+        done()
+      })
   })
-  
+
   it('It should delete a table', (done) => {
     const table = {
       number: 5
@@ -176,7 +176,7 @@ describe('Testing the tables endpoints:', () => {
       .post('/api/tables')
       .send(table)
       .end(() => {
-        const tableId = 2
+        const tableId = 4
         chai.request(server)
           .delete(`/api/tables/${tableId}`)
           .end((err, res) => {

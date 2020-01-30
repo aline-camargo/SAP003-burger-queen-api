@@ -29,7 +29,7 @@ describe('Testing the products endpoints:', () => {
       .end((err, res) => {
         expect(res.status).to.equal(201)
         expect(res.body.data).to.include({
-          id: 1,
+          id: 2,
           itens: product.itens,
           price: product.price,
           is_alcoholic: product.is_alcoholic
@@ -185,14 +185,24 @@ describe('Testing the products endpoints:', () => {
   })
   
   it('It should delete a product', (done) => {
-    const productId = 1
+    const product = {
+      itens: 'Cuba Libre',
+      price: 15,
+      is_alcoholic: true
+    }
+    const productId = 3;
     chai.request(server)
-      .delete(`/api/products/${productId}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(200)
-        expect(res.body.data).to.include({})
+    .post('/api/products')
+    .send(product)
+    .end(() => {
+      chai.request(server)
+        .delete(`/api/products/${productId}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(200)
+          expect(res.body.data).to.include({})
+        })
         done()
-      })
+    })
   })
 
 });
