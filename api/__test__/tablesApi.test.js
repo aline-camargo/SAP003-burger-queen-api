@@ -89,22 +89,28 @@ describe('Testing the tables endpoints:', () => {
       })
   })
 
-//   it('It should update a table', (done) => {
-//     const tableId = 1
-//     const updatedTable = {
-//       id: tableId,
-//       number: 66
-//     }
-//     chai.request(server)
-//       .put(`/api/tables/${tableId}`)
-//       .send(updatedTable)
-//       .end((err, res) => {
-//         expect(res.status).to.equal(200)
-//         expect(res.body.data.id).equal(updatedTable.id)
-//         expect(res.body.data.number).equal(updatedTable.number)
-//         done()
-//       })
-//   })
+  it('It should update a table', (done) => {
+    const table = {
+        number: 84
+    }
+    chai.request(server)
+    .post('/api/tables')
+    .send(table)
+    .end((err, tableRes) => {
+        const updatedTable = {
+            number: 54
+        }
+        chai.request(server)
+          .put(`/api/tables/${tableRes.body.data.id}`)
+          .send(updatedTable)
+          .end((err, res) => {
+              console.log(res.body)
+            expect(res.status).to.equal(200)
+            expect(res.body.data.number).equal(updatedTable.number)
+            done()
+          })
+    })
+  })
 
   it('It should not update a table with invalid id', (done) => {
     const tableId = 9999

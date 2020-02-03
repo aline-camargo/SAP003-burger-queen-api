@@ -1,4 +1,4 @@
-// require('dotenv').config();
+require('dotenv').config();
 
 import fs from 'fs';
 import path from 'path';
