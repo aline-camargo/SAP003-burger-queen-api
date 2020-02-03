@@ -6,17 +6,6 @@ chai.use(chatHttp)
 const { expect } = chai
 
 describe('Testing the tables endpoints:', () => {
-  // it('Should display a message when there is nothing to get', (done) => {
-  //   chai.request(server)
-  //   .get('/api/tables')
-  //   .end((err, res) => {
-  //     expect(res.status).to.equal(200)
-  //     res.body.should.have.property('message')
-  //         .eql('No tables found')
-  //       done()
-  //   })
-  // })
-
   it('It should create a table', (done) => {
     const table = {
       number: 66
@@ -27,7 +16,7 @@ describe('Testing the tables endpoints:', () => {
       .end((err, res) => {
         expect(res.status).to.equal(201)
         expect(res.body.data).to.include({
-          id: 4,
+          id: 5,
           number: 66
         })
         done()
@@ -58,15 +47,22 @@ describe('Testing the tables endpoints:', () => {
   })
 
   it('Should get particular table', (done) => {
-    const tableId = 1;
+    const table = {
+        number: 76
+    };
     chai.request(server)
-      .get(`/api/tables/${tableId}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(200)
-        expect(res.body.message).to.equal('Found table')
-        res.body.data.should.have.property('number')
-        done()
-      })
+    .post('/api/tables')
+    .send(table)
+    .end((err, tableRes) => {
+        chai.request(server)
+          .get(`/api/tables/${tableRes.body.data.id}`)
+          .end((err, res) => {
+            expect(res.status).to.equal(200)
+            expect(res.body.message).to.equal('Found table')
+            res.body.data.should.have.property('number')
+            done()
+          })
+    })
   })
 
   it('It should not get a particular table with invalid id', (done) => {
@@ -93,22 +89,22 @@ describe('Testing the tables endpoints:', () => {
       })
   })
 
-  it('It should update a table', (done) => {
-    const tableId = 1
-    const updatedTable = {
-      id: tableId,
-      number: 66
-    }
-    chai.request(server)
-      .put(`/api/tables/${tableId}`)
-      .send(updatedTable)
-      .end((err, res) => {
-        expect(res.status).to.equal(200)
-        expect(res.body.data.id).equal(updatedTable.id)
-        expect(res.body.data.number).equal(updatedTable.number)
-        done()
-      })
-  })
+//   it('It should update a table', (done) => {
+//     const tableId = 1
+//     const updatedTable = {
+//       id: tableId,
+//       number: 66
+//     }
+//     chai.request(server)
+//       .put(`/api/tables/${tableId}`)
+//       .send(updatedTable)
+//       .end((err, res) => {
+//         expect(res.status).to.equal(200)
+//         expect(res.body.data.id).equal(updatedTable.id)
+//         expect(res.body.data.number).equal(updatedTable.number)
+//         done()
+//       })
+//   })
 
   it('It should not update a table with invalid id', (done) => {
     const tableId = 9999
@@ -175,10 +171,9 @@ describe('Testing the tables endpoints:', () => {
     chai.request(server)
       .post('/api/tables')
       .send(table)
-      .end(() => {
-        const tableId = 4
+      .end((err, tableRes) => {
         chai.request(server)
-          .delete(`/api/tables/${tableId}`)
+          .delete(`/api/tables/${tableRes.body.data.id}`)
           .end((err, res) => {
             expect(res.status).to.equal(200)
             expect(res.body.data).to.include({})

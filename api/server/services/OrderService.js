@@ -62,13 +62,13 @@ class OrderService {
     }
   }
 
-  static async getAllOrdersItens() {
-    try {
-      return await database.Order_Itens.findAll()
-    } catch (error) {
-      throw error
-    }
-  }
+  // static async getAllOrdersItens() {
+  //   try {
+  //     return await database.Order_Itens.findAll()
+  //   } catch (error) {
+  //     throw error
+  //   }
+  // }
 
   static async getItensOfOrder(id) {
     try {
@@ -82,17 +82,17 @@ class OrderService {
     }
   }
 
-  static async getOrderItem(id) {
-    try {
-      const theOrderItem = await database.Order_Itens.findOne({
-        where: { id: Number(id) }
-      })
+  // static async getOrderItem(id) {
+  //   try {
+  //     const theOrderItem = await database.Order_Itens.findOne({
+  //       where: { id: Number(id) }
+  //     })
 
-      return theOrderItem
-    } catch (error) {
-      throw error
-    }
-  }
+  //     return theOrderItem
+  //   } catch (error) {
+  //     throw error
+  //   }
+  // }
 
   static async addOrderItens(newOrderItem) {
     try {
@@ -102,37 +102,37 @@ class OrderService {
     }
   }
 
-  static async updateOrderItem(id, updateOrderItem) {
-    try {
-      const itemToUpdate = await database.Order_Itens.findOne({
-        where: { id: Number(id) }
-      })
+  // static async updateOrderItem(id, updateOrderItem) {
+  //   try {
+  //     const itemToUpdate = await database.Order_Itens.findOne({
+  //       where: { id: Number(id) }
+  //     })
 
-      if (itemToUpdate) {
-        await database.Order_Itens.update(updateOrderItem, { where: { id: Number(id) } })
-        return updateOrderItem
-      }
-      return null
-    } catch (error) {
-      throw error
-    }
-  }
+  //     if (itemToUpdate) {
+  //       await database.Order_Itens.update(updateOrderItem, { where: { id: Number(id) } })
+  //       return updateOrderItem
+  //     }
+  //     return null
+  //   } catch (error) {
+  //     throw error
+  //   }
+  // }
 
-  static async deleteOrderItem(id) {
-    try {
-      const itemToDelete = await database.Order_Itens.findOne({ where: { id: Number(id) } })
+  // static async deleteOrderItem(id) {
+  //   try {
+  //     const itemToDelete = await database.Order_Itens.findOne({ where: { id: Number(id) } })
 
-      if (itemToDelete) {
-        const deletedOrderItem = await database.Order_Itens.destroy({
-          where: { id: Number(id) }
-        })
-        return deletedOrderItem
-      }
-      return null
-    } catch (error) {
-      throw error
-    }
-  }
+  //     if (itemToDelete) {
+  //       const deletedOrderItem = await database.Order_Itens.destroy({
+  //         where: { id: Number(id) }
+  //       })
+  //       return deletedOrderItem
+  //     }
+  //     return null
+  //   } catch (error) {
+  //     throw error
+  //   }
+  // }
 
 }
 
