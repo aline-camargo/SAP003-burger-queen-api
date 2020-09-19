@@ -18,7 +18,7 @@ A _API rest_ é compatível com as requisições vindas do _front_ a ser constru
 
 ## 2. Como utilizar
 
-A aplicação pode subir localmente, após a instalação de suas dependências, através do comando `docker compose up <ambiente>` (_dev_, _db_ ou _test_), dentro da pasta do projeto ou pode ser acessada através do [link](https://burguer-queen-lab.herokuapp.com/api) hospedado pelo Heroku.
+A aplicação pode subir localmente, após a instalação de suas dependências, através do comando `docker-compose up <ambiente>` (_dev_, _db_ ou _test_), dentro da pasta do projeto ou pode ser acessada através do [link](https://burguer-queen-lab.herokuapp.com/api) hospedado pelo Heroku.
 
 ***
 

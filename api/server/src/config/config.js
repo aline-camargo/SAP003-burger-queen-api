@@ -3,9 +3,9 @@ require('dotenv').config();
 module.exports = {
   "development": {
     "username": "postgres",
-    "password": null,
-    "database": "bq_api_development",
-    "host": "db",
+    "password": "postgres123",
+    "database": "bq-api-node_db",
+    "host": "127.0.0.1",
     "dialect": "postgres",
   },
   "test": {
