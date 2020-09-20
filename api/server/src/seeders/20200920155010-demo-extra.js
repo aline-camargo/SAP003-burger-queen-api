@@ -17,7 +17,14 @@ module.exports = {
     ], {});
   },
 
-  down: (queryInterface) => {
-    return queryInterface.bulkDelete('Extras', null, {});
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Extras', {
+      name: {
+        [Sequelize.Op.in]: [
+          'Queijo',
+          'Ovo'
+        ]
+      }
+    }, {});
   }
 };

@@ -23,7 +23,14 @@ module.exports = {
       }], {});
   },
 
-  down: (queryInterface) => {  
-    return queryInterface.bulkDelete('Menu', null, {});
+  down: (queryInterface, Sequelize) => {  
+    return queryInterface.bulkDelete('Menu', {
+      name: {
+        [Sequelize.Op.in]: [
+          'Café com leite',
+          'Água 500ml'
+        ]
+      }
+    }, {});
   }
 };

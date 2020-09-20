@@ -21,7 +21,14 @@ module.exports = {
     ], {});
   },
 
-  down: (queryInterface) => {
-    return queryInterface.bulkDelete('Flavours', null, {});
-  }
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete('Flavours', {
+      name: {
+        [Sequelize.Op.in]: [
+          'Vegetariano',
+          'Bovino',
+          'Frango'
+        ]
+      }
+    }, {});  }
 };
